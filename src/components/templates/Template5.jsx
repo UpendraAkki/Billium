@@ -2,17 +2,27 @@ import React from 'react';
 import { format } from 'date-fns';
 import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
+import Logo from '../Logo';
 
 const Template5 = ({ data = {} }) => {
-  const { billTo = {}, shipTo = {}, invoice = {}, yourCompany = {}, items = [], taxPercentage = 0, taxAmount = 0, subTotal = 0, grandTotal = 0, notes = '', selectedCurrency } = data;
+  const { billTo = {}, shipTo = {}, invoice = {}, yourCompany = {}, items = [], taxPercentage = 0, taxAmount = 0, subTotal = 0, grandTotal = 0, notes = '', selectedCurrency, branding = {} } = data;
 
   return (
     <BaseTemplate data={data}>
-      <div className="bg-white max-w-4xl mx-auto flex flex-col h-full overflow-hidden">
+      <div 
+        className="bg-white max-w-4xl mx-auto flex flex-col h-full overflow-hidden" 
+        style={{ fontFamily: branding?.fontFamily || 'Inter' }}
+      >
         <div className="p-8">
+          <Logo yourCompany={yourCompany} branding={branding} className="mb-4" />
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-4xl font-bold text-green-600">Invoice</h1>
+              <h1 
+                className="text-4xl font-bold" 
+                style={{ color: branding?.primaryColor || '#16a34a' }}
+              >
+                Invoice
+              </h1>
             </div>
             <div className="text-right">
               <h2 className="text-xl font-bold">

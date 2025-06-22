@@ -11,6 +11,8 @@ import { generateReceiptPDF } from "../utils/receiptPDFGenerator";
 import { generateGSTNumber } from "../utils/invoiceCalculations";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import ItemDetails from "../components/ItemDetails";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const generateRandomInvoiceNumber = () => {
   const length = Math.floor(Math.random() * 6) + 3;
@@ -78,6 +80,14 @@ const ReceiptPage = () => {
   const [notes, setNotes] = useState("");
   const [footer, setFooter] = useState("Thank you");
   const [selectedCurrency, setSelectedCurrency] = useState("INR");
+  const [branding, setBranding] = useState({
+    primaryColor: "#3B82F6",
+    secondaryColor: "#1E40AF",
+    accentColor: "#EF4444",
+    fontFamily: "Inter",
+    logoPosition: "left",
+    showLogo: true,
+  });
 
   const refreshFooter = () => {
     const randomIndex = Math.floor(Math.random() * footerOptions.length);
@@ -98,6 +108,14 @@ const ReceiptPage = () => {
       setNotes(parsedData.notes || "");
       setFooter(parsedData.footer || "Thank you");
       setSelectedCurrency(parsedData.selectedCurrency || "INR");
+      setBranding(parsedData.branding || {
+        primaryColor: "#3B82F6",
+        secondaryColor: "#1E40AF",
+        accentColor: "#EF4444",
+        fontFamily: "Inter",
+        logoPosition: "left",
+        showLogo: true,
+      });
     } else {
       // Initialize with default values if nothing in localStorage
       setInvoice((prev) => ({ ...prev, number: generateRandomInvoiceNumber() }));
@@ -117,9 +135,10 @@ const ReceiptPage = () => {
       notes,
       footer,
       selectedCurrency,
+      branding,
     };
     localStorage.setItem("receiptFormData", JSON.stringify(formData));
-  }, [billTo, invoice, yourCompany, cashier, items, taxPercentage, notes, footer, selectedCurrency]);
+  }, [billTo, invoice, yourCompany, cashier, items, taxPercentage, notes, footer, selectedCurrency, branding]);
 
   const handleDownloadPDF = async () => {
     if (!isDownloading && receiptRef.current) {
@@ -134,6 +153,7 @@ const ReceiptPage = () => {
         notes,
         footer,
         selectedCurrency,
+        branding,
       };
       try {
         await generateReceiptPDF(receiptRef.current, theme, receiptData);
@@ -223,6 +243,23 @@ const ReceiptPage = () => {
         <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md">
           <form>
             <div className="mb-6">
+              <div className="mb-4">
+                <h3 className="text-lg font-medium mb-2">Select Currency</h3>
+                <RadioGroup
+                  value={selectedCurrency}
+                  onValueChange={setSelectedCurrency}
+                  className="flex space-x-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="INR" id="inr" />
+                    <Label htmlFor="inr">INR (₹)</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="USD" id="usd" />
+                    <Label htmlFor="usd">USD ($)</Label>
+                  </div>
+                </RadioGroup>
+              </div>
               <h2 className="text-2xl font-semibold mb-4">Your Company</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FloatingLabelInput
@@ -323,6 +360,7 @@ const ReceiptPage = () => {
               handleItemChange={handleItemChange}
               addItem={addItem}
               removeItem={removeItem}
+              currencyCode={selectedCurrency}
             />
 
             <div className="mb-6">
@@ -450,6 +488,7 @@ const ReceiptPage = () => {
                   notes,
                   footer,
                   selectedCurrency,
+                  branding,
                 }}
               />
             )}
@@ -465,6 +504,7 @@ const ReceiptPage = () => {
                   notes,
                   footer,
                   selectedCurrency,
+                  branding,
                 }}
               />
             )}
@@ -480,6 +520,7 @@ const ReceiptPage = () => {
                   notes,
                   footer,
                   selectedCurrency,
+                  branding,
                 }}
               />
             )}
@@ -494,6 +535,7 @@ const ReceiptPage = () => {
                   footer,
                   cashier,
                   selectedCurrency,
+                  branding,
                 }}
               />
             )}

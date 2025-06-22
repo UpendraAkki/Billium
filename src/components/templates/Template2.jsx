@@ -1,23 +1,38 @@
 import React from 'react';
 import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
+import Logo from '../Logo';
 
 const Template2 = ({ data }) => {
-  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency } = data;
+  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency, branding } = data;
 
   return (
     <BaseTemplate data={data}>
-      <div className="bg-white p-8 max-w-4xl mx-auto">
-        <div className="flex justify-between mb-4 border-b-2 pb-4">
+      <div 
+        className="bg-white p-8 max-w-4xl mx-auto" 
+        style={{ fontFamily: branding?.fontFamily || 'Inter' }}
+      >
+        <Logo yourCompany={yourCompany} branding={branding} className="mb-4" />
+        <div className="flex justify-between mb-4 border-b-2 pb-4" style={{ borderColor: branding?.primaryColor || '#0891b2' }}>
           <div>
-            <h1 className="text-2xl font-bold text-cyan-700">
+            <h1 
+              className="text-2xl font-bold" 
+              style={{ color: branding?.primaryColor || '#0891b2' }}
+            >
               {yourCompany.name}
             </h1>
             <p>{yourCompany.address}</p>
             <p>{yourCompany.phone}</p>
+            {yourCompany.email && <p>{yourCompany.email}</p>}
+            {yourCompany.website && <p>{yourCompany.website}</p>}
           </div>
           <div className="text-right">
-            <h2 className="text-xl font-semibold text-cyan-700">Tax invoice</h2>
+            <h2 
+              className="text-xl font-semibold" 
+              style={{ color: branding?.primaryColor || '#0891b2' }}
+            >
+              Tax invoice
+            </h2>
             <p>INVOICE NUMBER: {invoice.number}</p>
             <p>DATE: {invoice.date}</p>
             <p>DUE DATE: {invoice.paymentDate}</p>
@@ -26,13 +41,23 @@ const Template2 = ({ data }) => {
 
         <div className="flex justify-between mb-8">
           <div>
-            <h3 className="font-semibold text-lg mb-2 text-cyan-700">Bill To</h3>
+            <h3 
+              className="font-semibold text-lg mb-2" 
+              style={{ color: branding?.primaryColor || '#0891b2' }}
+            >
+              Bill To
+            </h3>
             <p>{billTo.name}</p>
             <p>{billTo.address}</p>
             <p>{billTo.phone}</p>
           </div>
           <div>
-            <h3 className="font-semibold text-lg mb-2 text-cyan-700">Ship To</h3>
+            <h3 
+              className="font-semibold text-lg mb-2" 
+              style={{ color: branding?.primaryColor || '#0891b2' }}
+            >
+              Ship To
+            </h3>
             <p>{shipTo.name}</p>
             <p>{shipTo.address}</p>
             <p>{shipTo.phone}</p>

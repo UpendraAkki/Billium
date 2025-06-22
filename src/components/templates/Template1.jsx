@@ -1,24 +1,41 @@
 import React from 'react';
 import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
+import Logo from '../Logo';
 
 const Template1 = ({ data }) => {
-  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency } = data;
+  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency, branding } = data;
 
   return (
     <BaseTemplate data={data}>
-      <div className="bg-white p-8 max-w-4xl mx-auto">
+      <div 
+        className="bg-white p-8 max-w-4xl mx-auto" 
+        style={{ fontFamily: branding?.fontFamily || 'Inter' }}
+      >
         <div className="flex justify-between items-center mb-8">
+          <Logo yourCompany={yourCompany} branding={branding} />
           <div className="text-right">
-            <h2 className="text-3xl font-semibold">INVOICE</h2>
+            <h2 
+              className="text-3xl font-semibold"
+              style={{ color: branding?.primaryColor || '#000' }}
+            >
+              INVOICE
+            </h2>
           </div>
         </div>
 
         <div className="flex justify-between mb-12">
           <div>
-            <h1 className="text-2xl font-bold">{yourCompany.name}</h1>
+            <h1 
+              className="text-2xl font-bold" 
+              style={{ color: branding?.primaryColor || '#000' }}
+            >
+              {yourCompany.name}
+            </h1>
             <p>{yourCompany.address}</p>
             <p>{yourCompany.phone}</p>
+            {yourCompany.email && <p>{yourCompany.email}</p>}
+            {yourCompany.website && <p>{yourCompany.website}</p>}
           </div>
           <div>
             <p>Invoice Number: {invoice.number}</p>
@@ -44,7 +61,10 @@ const Template1 = ({ data }) => {
 
         <table className="w-full mb-8">
           <thead>
-            <tr className="border-t border-b bg-gray-100">
+            <tr 
+              className="border-t border-b"
+              style={{ backgroundColor: branding?.primaryColor + '20' || '#f3f4f6' }}
+            >
               <th className="p-2 text-left">Item</th>
               <th className="p-2 text-center">Quantity</th>
               <th className="p-2 text-right">Unit Price</th>

@@ -1,16 +1,18 @@
 import React from 'react';
 import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
+import Logo from '../Logo';
 
 const Template8 = ({ data }) => {
-  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency } = data;
+  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency, branding = {} } = data;
 
   return (
     <BaseTemplate data={data}>
       <div
         className="bg-gray-100 w-full h-full flex flex-col"
-        style={{ margin: "0", padding: "16px" }}
+        style={{ margin: "0", padding: "16px", fontFamily: branding?.fontFamily || 'Inter' }}
       >
+        <Logo yourCompany={yourCompany} branding={branding} className="mb-4" />
         <div className="grid grid-cols-2 gap-8 mb-8">
           <div>
             <h3 className="text-lg font-semibold mb-2">Billed to</h3>

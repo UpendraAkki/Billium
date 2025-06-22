@@ -2,16 +2,26 @@ import React from 'react';
 import { format } from 'date-fns';
 import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
+import Logo from '../Logo';
 
 const Template4 = ({ data }) => {
-  const { billTo = {}, shipTo = {}, invoice = {}, yourCompany = {}, items = [], taxPercentage = 0, taxAmount = 0, subTotal = 0, grandTotal = 0, notes = '', selectedCurrency } = data || {};
+  const { billTo = {}, shipTo = {}, invoice = {}, yourCompany = {}, items = [], taxPercentage = 0, taxAmount = 0, subTotal = 0, grandTotal = 0, notes = '', selectedCurrency, branding = {} } = data || {};
 
   return (
     <BaseTemplate data={data}>
-      <div className="bg-white p-8 max-w-4xl mx-auto">
+      <div 
+        className="bg-white p-8 max-w-4xl mx-auto" 
+        style={{ fontFamily: branding?.fontFamily || 'Inter' }}
+      >
+        <Logo yourCompany={yourCompany} branding={branding} className="mb-4" />
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-purple-600 mb-4">Invoice</h1>
+            <h1 
+              className="text-4xl font-bold mb-4" 
+              style={{ color: branding?.primaryColor || '#9333ea' }}
+            >
+              Invoice
+            </h1>
             <p>
               <span className="font-semibold">Invoice#:</span>{" "}
               {invoice.number || "N/A"}
@@ -35,12 +45,17 @@ const Template4 = ({ data }) => {
             </h2>
             <p>{yourCompany.address || "Company Address"}</p>
             <p>{yourCompany.phone || "Company Phone"}</p>
+            {yourCompany.email && <p>{yourCompany.email}</p>}
+            {yourCompany.website && <p>{yourCompany.website}</p>}
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-8 mb-8">
           <div className="bg-gray-100 p-4 rounded">
-            <h3 className="text-lg font-semibold text-purple-600 mb-2">
+            <h3 
+              className="text-lg font-semibold mb-2" 
+              style={{ color: branding?.primaryColor || '#9333ea' }}
+            >
               Billed by
             </h3>
             <p>
@@ -48,9 +63,14 @@ const Template4 = ({ data }) => {
             </p>
             <p>{yourCompany.address || "Company Address"}</p>
             <p>{yourCompany.phone || "Company Phone"}</p>
+            {yourCompany.email && <p>{yourCompany.email}</p>}
+            {yourCompany.website && <p>{yourCompany.website}</p>}
           </div>
           <div className="bg-gray-100 p-4 rounded">
-            <h3 className="text-lg font-semibold text-purple-600 mb-2">
+            <h3 
+              className="text-lg font-semibold mb-2" 
+              style={{ color: branding?.primaryColor || '#9333ea' }}
+            >
               Billed to
             </h3>
             <p>
@@ -62,7 +82,10 @@ const Template4 = ({ data }) => {
         </div>
 
         <table className="w-full mb-8 border border-gray-300">
-          <thead className="bg-purple-600 text-white">
+          <thead 
+            className="text-white" 
+            style={{ backgroundColor: branding?.primaryColor || '#9333ea' }}
+          >
             <tr>
               <th className="p-2 text-left border border-gray-300">
                 Item #/Item Description
@@ -117,7 +140,12 @@ const Template4 = ({ data }) => {
 
         {notes && (
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-purple-600 mb-2">Note</h3>
+            <h3 
+              className="text-lg font-semibold mb-2" 
+              style={{ color: branding?.primaryColor || '#9333ea' }}
+            >
+              Note
+            </h3>
             <p>{notes}</p>
           </div>
         )}

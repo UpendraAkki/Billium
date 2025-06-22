@@ -1,15 +1,23 @@
 import React from 'react';
 import BaseTemplate from './BaseTemplate';
 import { formatCurrency } from '../../utils/formatCurrency';
+import Logo from '../Logo';
 
 const Template3 = ({ data }) => {
-  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency } = data;
+  const { billTo, shipTo, invoice, yourCompany, items, taxPercentage, taxAmount, subTotal, grandTotal, notes, selectedCurrency, branding } = data;
 
   return (
     <BaseTemplate data={data}>
-      <div className="bg-blue-500 text-white p-12">
+      <div 
+        className="text-white p-12" 
+        style={{ 
+          backgroundColor: branding?.primaryColor || '#3b82f6',
+          fontFamily: branding?.fontFamily || 'Inter'
+        }}
+      >
         <div className="flex justify-between items-start mb-8">
           <div>
+            <Logo yourCompany={yourCompany} branding={branding} className="mb-4" />
             <div className="text-white inline-block">
               <h1 className="text-2xl font-bold" id="company-name">
                 {yourCompany?.name || "Your Company Name"}
@@ -19,6 +27,8 @@ const Template3 = ({ data }) => {
               {yourCompany?.address || "Your Company Address"}
             </p>
             <p>{yourCompany?.phone || "Your Company Phone"}</p>
+            {yourCompany?.email && <p>{yourCompany.email}</p>}
+            {yourCompany?.website && <p>{yourCompany.website}</p>}
           </div>
           <div>
             <h2 className="text-xl font-semibold mb-2">BILLED TO</h2>
@@ -42,9 +52,15 @@ const Template3 = ({ data }) => {
           </div>
         </div>
       </div>
-      <div className="rounded-lg border border-blue-500 -mt-[42px] w-[92%] mx-auto">
-        <div id="item-data" className="w-full mb-8">
-          <div className="bg-blue-200 flex rounded-t">
+      <div 
+        className="rounded-lg border -mt-[42px] w-[92%] mx-auto" 
+        style={{ borderColor: branding?.primaryColor || '#3b82f6' }}
+      >
+                  <div id="item-data" className="w-full mb-8">
+            <div 
+              className="flex rounded-t" 
+              style={{ backgroundColor: branding?.primaryColor + '40' || '#bfdbfe' }}
+            >
             <div className="p-2 w-12"></div>
             <div className="p-2 flex-grow text-left">
               ITEM NAME/ITEM DESCRIPTION
@@ -84,7 +100,10 @@ const Template3 = ({ data }) => {
                 <span>{formatCurrency(taxAmount, selectedCurrency)}</span>
               </div>
             )}
-            <div className="flex justify-between font-bold bg-blue-500 text-white p-2 mt-4">
+            <div 
+              className="flex justify-between font-bold text-white p-2 mt-4" 
+              style={{ backgroundColor: branding?.primaryColor || '#3b82f6' }}
+            >
               <span className="text-left">Total</span>
               <span>{formatCurrency(grandTotal, selectedCurrency)}</span>
             </div>

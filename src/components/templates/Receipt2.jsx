@@ -5,7 +5,7 @@ import { calculateSubTotal, calculateTaxAmount, calculateGrandTotal } from '../.
 import { formatCurrency } from '../../utils/formatCurrency';
 
 const Receipt2 = ({ data, isPrint = false }) => {
-  const { billTo = {}, invoice = {}, yourCompany = {}, cashier = '', items = [], taxPercentage = 0, notes = '', footer = '', selectedCurrency } = data || {};
+  const { billTo = {}, invoice = {}, yourCompany = {}, cashier = '', items = [], taxPercentage = 0, notes = '', footer = '', selectedCurrency, branding = {} } = data || {};
 
   const subTotal = calculateSubTotal(items);
   const taxAmount = calculateTaxAmount(subTotal, taxPercentage);
@@ -23,7 +23,7 @@ const Receipt2 = ({ data, isPrint = false }) => {
         className="bg-white flex flex-col min-h-full"
         style={{
           fontSize: isPrint ? "8px" : "14px",
-          fontFamily: "'Consolas', monospace",
+          fontFamily: branding?.fontFamily || "'Consolas', monospace",
           whiteSpace: "pre-wrap",
           lineHeight: "1.2",
         }}

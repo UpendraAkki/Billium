@@ -5,6 +5,7 @@ import FloatingLabelInput from '../components/FloatingLabelInput';
 import BillToSection from '../components/BillToSection';
 import ShipToSection from '../components/ShipToSection';
 import ItemDetails from "../components/ItemDetails";
+import BrandingSection from '../components/BrandingSection';
 import { templates } from "../utils/templateRegistry";
 import { FiEdit, FiFileText, FiTrash2 } from "react-icons/fi"; // Added FiTrash2 icon
 import { RefreshCw } from "lucide-react";
@@ -66,6 +67,9 @@ const Index = () => {
     name: "",
     address: "",
     phone: "",
+    email: "",
+    website: "",
+    logo: "",
   });
   const [items, setItems] = useState([]);
   const [taxPercentage, settaxPercentage] = useState(0);
@@ -73,6 +77,14 @@ const Index = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
   const [notes, setNotes] = useState("");
+  const [branding, setBranding] = useState({
+    primaryColor: "#3B82F6",
+    secondaryColor: "#1E40AF",
+    accentColor: "#EF4444",
+    fontFamily: "Inter",
+    logoPosition: "left",
+    showLogo: true,
+  });
 
   const refreshNotes = () => {
     const randomIndex = Math.floor(Math.random() * noteOptions.length);
@@ -90,12 +102,20 @@ const Index = () => {
         parsedData.invoice || { date: "", paymentDate: "", number: "" }
       );
       setYourCompany(
-        parsedData.yourCompany || { name: "", address: "", phone: "" }
+        parsedData.yourCompany || { name: "", address: "", phone: "", email: "", website: "", logo: "" }
       );
       setItems(parsedData.items || []);
       settaxPercentage(parsedData.taxPercentage || 0);
       setNotes(parsedData.notes || "");
       setSelectedCurrency(parsedData.selectedCurrency || "INR"); // Load selectedCurrency from localStorage
+      setBranding(parsedData.branding || {
+        primaryColor: "#3B82F6",
+        secondaryColor: "#1E40AF",
+        accentColor: "#EF4444",
+        fontFamily: "Inter",
+        logoPosition: "left",
+        showLogo: true,
+      });
     } else {
       // If no saved data, set invoice number
       setInvoice((prev) => ({
@@ -119,6 +139,7 @@ const Index = () => {
       grandTotal,
       notes,
       selectedCurrency, // Add selectedCurrency to localStorage
+      branding,
     };
     localStorage.setItem("formData", JSON.stringify(formData));
   }, [
@@ -133,6 +154,7 @@ const Index = () => {
     subTotal,
     grandTotal,
     selectedCurrency, // Add selectedCurrency to localStorage dependency array
+    branding,
   ]);
 
   const handleInputChange = (setter) => (e) => {
@@ -213,6 +235,7 @@ const Index = () => {
       grandTotal,
       notes,
       selectedCurrency, // Add this
+      branding,
     };
     navigate("/template", {
       state: { formData, selectedTemplate: templateNumber },
@@ -241,6 +264,9 @@ const Index = () => {
       name: "Your Company",
       address: "789 Oak St, Businessville, USA",
       phone: "(555) 555-5555",
+      email: "contact@yourcompany.com",
+      website: "www.yourcompany.com",
+      logo: "",
     });
     setItems([
       {
@@ -299,7 +325,7 @@ const Index = () => {
       paymentDate: "",
       number: generateRandomInvoiceNumber(),
     });
-    setYourCompany({ name: "", address: "", phone: "" });
+    setYourCompany({ name: "", address: "", phone: "", email: "", website: "", logo: "" });
     setItems([{ name: "", description: "", quantity: 0, amount: 0, total: 0 }]);
     settaxPercentage(0);
     setNotes("");
@@ -338,6 +364,7 @@ const Index = () => {
                 taxPercentage,
                 notes,
                 selectedCurrency, // Ensure this is passed
+                branding,
               },
             },
           })
@@ -393,33 +420,12 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold mb-4">Your Company</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FloatingLabelInput
-                  id="yourCompanyName"
-                  label="Name"
-                  value={yourCompany.name}
-                  onChange={handleInputChange(setYourCompany)}
-                  name="name"
-                />
-                <FloatingLabelInput
-                  id="yourCompanyPhone"
-                  label="Phone"
-                  value={yourCompany.phone}
-                  onChange={handleInputChange(setYourCompany)}
-                  name="phone"
-                />
-              </div>
-              <FloatingLabelInput
-                id="yourCompanyAddress"
-                label="Address"
-                value={yourCompany.address}
-                onChange={handleInputChange(setYourCompany)}
-                name="address"
-                className="mt-4"
-              />
-            </div>
+            <BrandingSection
+              yourCompany={yourCompany}
+              handleInputChange={handleInputChange(setYourCompany)}
+              branding={branding}
+              setBranding={setBranding}
+            />
 
             <ItemDetails
               items={items}
